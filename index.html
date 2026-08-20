@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>csharp status</title>
+</head>
+
+<body>
+    <pre id="s">checking...</pre>
+    <script>
+        fetch('https://cool-boat-6b10.rabbydevs.workers.dev/')
+            .then(r => r.json())
+            .then(d => {
+                if (d.enabled) {
+                    document.getElementById('s').textContent =
+                        'csharp is enabled with the following details:\n' +
+                        'platform = ' + (d.platform ?? 'unknown') + '\n' +
+                        'rollout = ' + d.rolloutPercent + '%\n' +
+                        'left = ' + d.left + '\n' +
+                        'right = ' + d.right + '\n' +
+                        'divisor = ' + d.divisor;
+                } else {
+                    document.getElementById('s').textContent = 'csharp is disabled';
+                }
+            })
+            .catch(() => document.getElementById('s').textContent = 'error reaching proxy');
+    </script>
+</body>
+
+</html>
