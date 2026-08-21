@@ -12,17 +12,22 @@
         fetch('https://cool-boat-6b10.rabbydevs.workers.dev/')
             .then(r => r.json())
             .then(d => {
-                if (d.enabled) {
-                    document.getElementById('s').textContent =
-                        'csharp is enabled with the following details:\n' +
-                        'platform = ' + (d.platform ?? 'unknown') + '\n' +
-                        'rollout = ' + d.rolloutPercent + '%\n' +
-                        'left = ' + d.left + '\n' +
-                        'right = ' + d.right + '\n' +
-                        'divisor = ' + d.divisor;
-                } else {
+                if (!d.enabled) {
                     document.getElementById('s').textContent = 'csharp is disabled';
+                    return;
                 }
+                let out = 'csharp is enabled with the following details:\n\n';
+                d.entries.forEach((e, i) => {
+                    out += 'entry ' + (i + 1) + ':\n';
+                    out += '  platform = ' + (e.platform ?? 'unknown') + '\n';
+                    out += '  rollout = ' + e.rolloutPercent + '%\n';
+                    out += '  left = ' + e.left + '\n';
+                    out += '  right = ' + e.right + '\n';
+                    out += '  divisor = ' + e.divisor + '\n';
+                    if (e.forceDisableAOT !== null) out += '  forceDisableAOT = ' + e.forceDisableAOT + '\n';
+                    out += '\n';
+                });
+                document.getElementById('s').textContent = out.trimEnd();
             })
             .catch(() => document.getElementById('s').textContent = 'error reaching proxy');
     </script>
